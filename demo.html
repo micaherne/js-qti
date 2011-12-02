@@ -8,6 +8,7 @@
 <script type="text/javascript" src="lib/js/qti-interaction-widgets.js"></script>
 <script type="text/javascript">
 
+// choice.xml
 var choiceInteraction1Xml = '<choiceInteraction responseIdentifier="RESPONSE" shuffle="false" maxChoices="1">\
 	<prompt>What does it say?</prompt>\
 	<simpleChoice identifier="ChoiceA">You must stay with your luggage at all times.</simpleChoice>\
@@ -15,6 +16,7 @@ var choiceInteraction1Xml = '<choiceInteraction responseIdentifier="RESPONSE" sh
 	<simpleChoice identifier="ChoiceC">Remember your luggage when you leave.</simpleChoice>\
 </choiceInteraction>';
 
+// choice_multiple.xml
 var choiceInteraction2Xml = '<choiceInteraction responseIdentifier="RESPONSE" shuffle="true" maxChoices="0">\
 	<prompt>Which of the following elements are used to form water?</prompt>\
 	<simpleChoice identifier="H" fixed="false">Hydrogen</simpleChoice>\
@@ -25,9 +27,31 @@ var choiceInteraction2Xml = '<choiceInteraction responseIdentifier="RESPONSE" sh
 	<simpleChoice identifier="Cl" fixed="false">Chlorine</simpleChoice>\
 </choiceInteraction>';
 
+// feedback.xml
+var choiceInteraction3Xml = '<choiceInteraction responseIdentifier="RESPONSE" shuffle="false" maxChoices="1">\
+	<prompt>Who is the President of Mexico?</prompt>\
+	<simpleChoice identifier="MGH001A"> George W Bush <feedbackInline\
+			outcomeIdentifier="FEEDBACK" identifier="MGH001A" showHide="show">No, he is the\
+			President of the USA.</feedbackInline>\
+	</simpleChoice>\
+	<simpleChoice identifier="MGH001B"> Tony Blair <feedbackInline\
+			outcomeIdentifier="FEEDBACK" identifier="MGH001B" showHide="show">No, he is the\
+			Prime Minister of England.</feedbackInline>\
+	</simpleChoice>\
+	<simpleChoice identifier="MGH001C"> Vicente Fox <feedbackInline\
+			outcomeIdentifier="FEEDBACK" identifier="MGH001C" showHide="show"\
+		>Yes.</feedbackInline>\
+	</simpleChoice>\
+	<simpleChoice identifier="MGH001D"> Ariel Sharon <feedbackInline\
+			outcomeIdentifier="FEEDBACK" identifier="MGH001D" showHide="show">No, he is the\
+			Prime Minister of Israel.</feedbackInline>\
+	</simpleChoice>\
+</choiceInteraction>';
+
 	$(document).ready(function() {
 		var choiceInteraction1 = $('div.choiceInteraction1').choiceInteraction({qtiElement: $(choiceInteraction1Xml), cardinality: 'single', baseType: 'identifier'});
 		var choiceInteraction2 = $('div.choiceInteraction2').choiceInteraction({qtiElement: $(choiceInteraction2Xml), cardinality: 'multiple', baseType: 'identifier'});
+		var choiceInteraction3 = $('div.choiceInteraction3').choiceInteraction({qtiElement: $(choiceInteraction3Xml), cardinality: 'single', baseType: 'identifier'});
 		
 	});
 </script>
@@ -42,5 +66,6 @@ var choiceInteraction2Xml = '<choiceInteraction responseIdentifier="RESPONSE" sh
 <body>
 	<div class="choiceInteraction1"></div>
 	<div class="choiceInteraction2"></div>
+	<div class="choiceInteraction3"></div>
 </body>
 </html>
