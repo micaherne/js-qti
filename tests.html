@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>QUnit Test Suite</title>
+<link rel="stylesheet" href="lib/js/qunit/qunit/qunit.css" type="text/css"
+	media="screen">
+<script type="text/javascript" src="lib/js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript"
+	src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+<script type="text/javascript" src="lib/js/lib3.js"></script>
+<script type="text/javascript" src="lib/js/qunit/qunit/qunit.js"></script>
+
+<script type="text/javascript">
+
+var item = {};
+
+var choiceXml = '<choiceInteraction responseIdentifier="RESPONSE" shuffle="false" maxChoices="1">\
+	<prompt>What does it say?</prompt>\
+	<simpleChoice identifier="ChoiceA">You must stay with your luggage at all times.</simpleChoice>\
+	<simpleChoice identifier="ChoiceB">Do not let someone else look after your luggage.</simpleChoice>\
+	<simpleChoice identifier="ChoiceC">Remember your luggage when you leave.</simpleChoice>\
+</choiceInteraction>';
+
+module('Response Variables');
+
+var responseDeclarationXml = '<responseDeclaration identifier="RESPONSE" cardinality="single" baseType="identifier">\
+	<correctResponse>\
+<value>ChoiceA</value>\
+</correctResponse>\
+</responseDeclaration>';
+
+module('Choice Interaction');
+
+test("Create from XML - options passed", function() {
+	var choiceInteraction1 = $('<div/>').choiceInteraction({qtiElement: $(choiceXml), cardinality: 'single', baseType: 'identifier'});
+	equals($('.simpleChoice', choiceInteraction1).size(), 3);
+});
+
+</script>
+</head>
+<body>
+	<h1 id="qunit-header">QUnit Test Suite</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+	<div id="qunit-fixture">test markup</div>
+</body>
+</html>
