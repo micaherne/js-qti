@@ -28,7 +28,16 @@ var samples = {
 			<simpleChoice identifier="O" fixed="false">Oxygen</simpleChoice>\
 			<simpleChoice identifier="N" fixed="false">Nitrogen</simpleChoice>\
 			<simpleChoice identifier="Cl" fixed="false">Chlorine</simpleChoice>\
-		</choiceInteraction>'
+		</choiceInteraction>',
+		
+		// choice_fixed.xml
+		choiceFixedXml: '<choiceInteraction responseIdentifier="RESPONSE" shuffle="true" maxChoices="1">\
+            <prompt>What does it say?</prompt>\
+            <simpleChoice identifier="ChoiceA">You must stay with your luggage at all times.</simpleChoice>\
+            <simpleChoice identifier="ChoiceB">Do not let someone else look after your luggage.</simpleChoice>\
+            <simpleChoice identifier="ChoiceC">Remember your luggage when you leave.</simpleChoice>\
+            <simpleChoice identifier="ChoiceD" fixed="true">None of the above.</simpleChoice>\
+        </choiceInteraction>'
 
 };
 
@@ -38,9 +47,9 @@ function createQtiElement(name) {
 
 $(document).ready(function(){
 	var item = new QTI.AssessmentItem();
-    var choiceQtiElement = createQtiElement('choiceMultipleXml');
+    var choiceQtiElement = createQtiElement('choiceFixedXml');
 	var choice = $('<div/>').choiceInteraction( { qtiElement: choiceQtiElement, assessmentItem: item, responseDeclaration: {
-		   cardinality: 'multiple',
+		   cardinality: 'single',
 		   baseType: 'identifier',
 		   identifier: 'RESPONSE'
 		} 
