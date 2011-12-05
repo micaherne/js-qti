@@ -39,7 +39,12 @@ function createQtiElement(name) {
 $(document).ready(function(){
 	var item = new QTI.AssessmentItem();
     var choiceQtiElement = createQtiElement('choiceMultipleXml');
-	var choice = $('<div/>').choiceInteraction( { qtiElement: choiceQtiElement, assessmentItem: item });
+	var choice = $('<div/>').choiceInteraction( { qtiElement: choiceQtiElement, assessmentItem: item, responseDeclaration: {
+		   cardinality: 'multiple',
+		   baseType: 'identifier',
+		   identifier: 'RESPONSE'
+		} 
+	});
 	$('body').append(choice);
 	choice.on('choiceinteractionclick', function(e, data){
 		console.log(e);
