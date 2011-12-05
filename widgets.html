@@ -17,7 +17,18 @@ var samples = {
 	            <simpleChoice identifier="ChoiceA">You must stay with your luggage at all times.</simpleChoice>\
 	            <simpleChoice identifier="ChoiceB">Do not let someone else look after your luggage.</simpleChoice>\
 	            <simpleChoice identifier="ChoiceC">Remember your luggage when you leave.</simpleChoice>\
-	        </choiceInteraction>'
+	        </choiceInteraction>',
+
+	    // choice_multiple.xml
+	    choiceMultipleXml: '<choiceInteraction responseIdentifier="RESPONSE" shuffle="true" maxChoices="0">\
+			<prompt>Which of the following elements are used to form water?</prompt>\
+			<simpleChoice identifier="H" fixed="false">Hydrogen</simpleChoice>\
+			<simpleChoice identifier="He" fixed="false">Helium</simpleChoice>\
+			<simpleChoice identifier="C" fixed="false">Carbon</simpleChoice>\
+			<simpleChoice identifier="O" fixed="false">Oxygen</simpleChoice>\
+			<simpleChoice identifier="N" fixed="false">Nitrogen</simpleChoice>\
+			<simpleChoice identifier="Cl" fixed="false">Chlorine</simpleChoice>\
+		</choiceInteraction>'
 
 };
 
@@ -27,9 +38,13 @@ function createQtiElement(name) {
 
 $(document).ready(function(){
 	var item = new QTI.AssessmentItem();
-    var choiceQtiElement = createQtiElement('choiceXml');
+    var choiceQtiElement = createQtiElement('choiceMultipleXml');
 	var choice = $('<div/>').choiceInteraction( { qtiElement: choiceQtiElement, assessmentItem: item });
 	$('body').append(choice);
+	choice.on('choiceinteractionclick', function(e, data){
+		console.log(e);
+		console.log(data);
+	});
 });
 
 </script>
