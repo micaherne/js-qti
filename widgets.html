@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<script type="text/javascript" src="lib/js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="lib/js/jquery-ui-1.8.16/js/jquery-ui-1.8.16.custom.min.js"></script>
+<script type="text/javascript" src="lib/js/jquery-qti.js"></script>
+
+<script type="text/javascript">
+// choice.xml
+var choiceXml = '<choiceInteraction responseIdentifier="RESPONSE" shuffle="false" maxChoices="1">\
+            <prompt>What does it say?</prompt>\
+            <simpleChoice identifier="ChoiceA">You must stay with your luggage at all times.</simpleChoice>\
+            <simpleChoice identifier="ChoiceB">Do not let someone else look after your luggage.</simpleChoice>\
+            <simpleChoice identifier="ChoiceC">Remember your luggage when you leave.</simpleChoice>\
+        </choiceInteraction>';
+
+$(document).ready(function(){
+	var item = new QTI.AssessmentItem();
+    var choiceQtiElement = $.parseXML(choiceXml).documentElement;
+	var choice = $('<div/>').choiceInteraction( { qtiElement: choiceQtiElement, assessmentItem: item });
+	$('body').append(choice);
+});
+
+</script>
+<style type="text/css">
+    @import url(lib/jquery-ui-1.8.16/css/ui-lightness/jquery-ui-1.8.16.custom.css);
+</style>
+</head>
+<body>
+
+</body>
+</html>

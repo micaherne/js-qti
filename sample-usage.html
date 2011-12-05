@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<script type="text/javascript" src="lib/js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+<script type="text/javascript" src="lib/js/jquery-qti.js"></script>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+    var item = new QTI.AssessmentItem();
+    //item.loadQTI('http://localhost/js-qti2/ref/qtiv2p1pd2/examples/items/choice.xml');
+    //item.loadQTI('http://localhost/js-qti2/ref/qtiv2p1pd2/examples/items/feedback.xml');
+    item.loadQTI('http://localhost/js-qti2/ref/qtiv2p1pd2/examples/items/choice_multiple_chocolade.xml');
+    $(item).on('qtiloaded', function() {
+    	 alert('loaded');
+    };
+    $('div').append(item.htmlElement);
+    
+});
+
+</script>
+</head>
+<body>
+    <div> </div>
+</body>
+</html>
