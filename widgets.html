@@ -8,17 +8,26 @@
 <script type="text/javascript" src="lib/js/jquery-qti.js"></script>
 
 <script type="text/javascript">
-// choice.xml
-var choiceXml = '<choiceInteraction responseIdentifier="RESPONSE" shuffle="false" maxChoices="1">\
-            <prompt>What does it say?</prompt>\
-            <simpleChoice identifier="ChoiceA">You must stay with your luggage at all times.</simpleChoice>\
-            <simpleChoice identifier="ChoiceB">Do not let someone else look after your luggage.</simpleChoice>\
-            <simpleChoice identifier="ChoiceC">Remember your luggage when you leave.</simpleChoice>\
-        </choiceInteraction>';
+
+var samples = { 
+
+		// choice.xml
+	    choiceXml: '<choiceInteraction responseIdentifier="RESPONSE" shuffle="false" maxChoices="1">\
+	            <prompt>What does it say?</prompt>\
+	            <simpleChoice identifier="ChoiceA">You must stay with your luggage at all times.</simpleChoice>\
+	            <simpleChoice identifier="ChoiceB">Do not let someone else look after your luggage.</simpleChoice>\
+	            <simpleChoice identifier="ChoiceC">Remember your luggage when you leave.</simpleChoice>\
+	        </choiceInteraction>'
+
+};
+
+function createQtiElement(name) {
+	return $.parseXML(samples[name]).documentElement;
+}
 
 $(document).ready(function(){
 	var item = new QTI.AssessmentItem();
-    var choiceQtiElement = $.parseXML(choiceXml).documentElement;
+    var choiceQtiElement = createQtiElement('choiceXml');
 	var choice = $('<div/>').choiceInteraction( { qtiElement: choiceQtiElement, assessmentItem: item });
 	$('body').append(choice);
 });
