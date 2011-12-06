@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<script type="text/javascript" src="lib/js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="lib/js/jquery-ui-1.8.16/js/jquery-ui-1.8.16.custom.min.js"></script>
+<script type="text/javascript" src="lib/js/jquery-qti.js"></script>
+
+<script type="text/javascript">
+
+var responseDeclarationXml = '<responseDeclaration identifier="RESPONSE" cardinality="single" baseType="identifier">\
+									<correctResponse>\
+								<value>ChoiceA</value>\
+								</correctResponse>\
+							  </responseDeclaration>';
+
+var outcomeDeclarationXml = '<outcomeDeclaration identifier="SCORE" cardinality="single" baseType="integer">\
+	<defaultValue>\
+<value>0</value>\
+</defaultValue>\
+</outcomeDeclaration>';
+
+var responseDeclaration = {
+	identifier: 'RESPONSE',
+	cardinality: 'single',
+	baseType: 'identifier'
+};
+responseDeclaration.qtiElement = $.parseXML(responseDeclarationXml).documentElement;
+
+var outcomeDeclaration = {
+	identifier: 'SCORE',
+	cardinality: 'single',
+	baseType: 'integer'
+};
+outcomeDeclaration.qtiElement = $.parseXML(outcomeDeclarationXml).documentElement;
+
+$(document).ready(function(){
+	var item = new QTI.AssessmentItem();
+
+	var response = $.extend(true, { value: null }, responseDeclaration);
+	var outcome = $.extend(true, { value: 0 }, outcomeDeclaration);
+    var responseProcessor = new QTI.ClientProcessor();
+    responseProcessor.variables['RESPONSE'] = response;
+    responseProcessor.variables['SCORE'] = outcome;
+    responseProcessor.loadQTI('ref/qtiv2p1pd2/rptemplates/match_correct.xml');
+
+	$('input').on('click', function(e){
+		responseProcessor.run();
+	});
+});
+
+</script>
+<style type="text/css">
+    @import url(lib/jquery-ui-1.8.16/css/ui-lightness/jquery-ui-1.8.16.custom.css);
+</style>
+</head>
+<body>
+	<input type="button" />
+</body>
+</html>
