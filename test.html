@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>QTI Test</title>
+<style type="text/css">
+    @import url(lib/js/jquery-ui-1.8.16/css/ui-lightness/jquery-ui-1.8.16.custom.css);
+</style>
+<script type="text/javascript" src="lib/js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="lib/js/jquery-ui-1.8.16/js/jquery-ui-1.8.16.custom.min.js"></script>
+<script type="text/javascript" src="lib/js/jquery-qti-clientprocessing.js"></script>
+<script type="text/javascript" src="lib/js/jquery-qti-widgets.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	var item1 = $('<div/>').assessmentItem( { 
+		//qtiPath: 'http://localhost/js-qti2/ref/qtiv2p1pd2/examples/items/feedback.xml',
+		qtiPath: 'http://localhost/js-qti2/ref/qtiv2p1pd2/examples/items/choice_multiple.xml',
+        responseProcessing: new QTI.ClientResponseProcessing()} );
+	item1.on('assessmentitemqtiload', function(){
+		item1.assessmentItem('startSession');
+	});
+	$('body').append(item1);
+});
+</script>
+
+</head>
+<body>
+
+</body>
+</html>
