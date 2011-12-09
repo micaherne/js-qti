@@ -12,6 +12,9 @@
 <script type="text/javascript" src="lib/js/jquery-qti-widgets.js"></script>
 
 <script type="text/javascript">
+
+if(!window.console) console = { log: function(r){} };
+
 $(document).ready(function(){
 	var item1 = $('<div/>').assessmentItem( { 
 		qtiPath: 'http://localhost/js-qti/ref/qtiv2p1pd2/examples/items/feedback.xml',
