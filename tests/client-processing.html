@@ -9,7 +9,7 @@
 	<script type="text/javascript" src="../lib/js/jquery-qti-widgets.js"></script>
 	<script type="text/javascript" src="qunit/qunit/qunit.js"></script>
 	<script type="text/javascript">
-		$(document).ready(function(){
+		
 			test('Variable declarations', function() {
 				var var1Xml = $.parseXML('<outcomeDeclaration identifier="STORY" cardinality="single" baseType="identifier">\
 						<defaultValue>\
@@ -28,10 +28,9 @@
 
 				var1Instance.cardinality = 'multiple';
 				var1Instance.setValue([2, 3, 5, 7]);
-				console.log(var1Instance);
 				equals(5, var1Instance.getValue()[2]);
 			});
-		});
+
 	</script>
 
 </head>
