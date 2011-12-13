@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>QUnit Test Suite</title>
+	<link rel="stylesheet" href="qunit/qunit/qunit.css" type="text/css" media="screen">
+	<script type="text/javascript" src="../lib/js/jquery-1.7.1.min.js"></script>
+	<script type="text/javascript" src="../lib/js/jquery-ui-1.8.16/js/jquery-ui-1.8.16.custom.min.js"></script>
+	<script type="text/javascript" src="../lib/js/jquery-qti-widgets.js"></script>
+	<script type="text/javascript" src="qunit/qunit/qunit.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			test('Variable declarations', function() {
+				var var1Xml = $.parseXML('<outcomeDeclaration identifier="STORY" cardinality="single" baseType="identifier">\
+						<defaultValue>\
+						<value>openingGambit</value>\
+					</defaultValue>\
+				</outcomeDeclaration>');
+
+				equals('STORY', $(var1Xml.documentElement).attr('identifier'));
+
+				var var1 = new QTI.Variable(var1Xml.documentElement);
+				equals('identifier', var1.baseType);
+				equals('openingGambit', var1.getDefaultValue());
+
+				var var1Instance = var1.newInstance();
+				equals('openingGambit', var1Instance.getValue());
+
+				var1Instance.cardinality = 'multiple';
+				var1Instance.setValue([2, 3, 5, 7]);
+				console.log(var1Instance);
+				equals(5, var1Instance.getValue()[2]);
+			});
+		});
+	</script>
+
+</head>
+<body>
+	<h1 id="qunit-header">QUnit Test Suite</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+	<div id="qunit-fixture">test markup</div>
+</body>
+</html>
