@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>QUnit Test Suite</title>
+	<link rel="stylesheet" href="qunit/qunit/qunit.css" type="text/css" media="screen">
+	<script type="text/javascript" src="../lib/js/jquery-1.7.1.min.js"></script>
+	<script type="text/javascript" src="../lib/js/jquery-ui-1.8.16/js/jquery-ui-1.8.16.custom.min.js"></script>
+	<script type="text/javascript" src="../lib/js/jquery-qti-widgets.js"></script>
+	<script type="text/javascript" src="qunit/qunit/qunit.js"></script>
+	<script type="text/javascript">
+		
+			test('Basic type', function() {
+				var type1 = new QTI.Type();
+				ok(type1.cardinality() === 'single');
+				ok(type1.baseType() === 'identifier');
+				ok(type1.value() === null);
+				type1.value('test1');
+				ok(type1.value() === 'test1');
+			});
+
+			test('Multiple cardinality', function() {
+				var type2 = new QTI.Type().cardinality('multiple');
+				ok(type2.cardinality() === 'multiple');
+				ok(type2.baseType() === 'identifier');
+				ok(type2.value() === null);
+				type2.value([1, 'two']);
+				ok(type2.value()[0] === 1);
+				ok(type2.value()[1] === 'two');
+			});
+
+			test('Equals', function() {
+				var type3a = new QTI.Type().value(4);
+				var type3b = new QTI.Type().value(4);
+				var type3c = new QTI.Type().value(3);
+				ok(type3a.equals(type3a));
+				ok(type3a.equals(type3b));
+				ok(type3b.equals(type3a));
+				ok(!(type3a.equals(type3c)));
+
+				// different types
+				var type3d = new QTI.Type().cardinality('multiple').value(4);
+				ok(!type3a.equals(type3d));
+
+				// multiple
+				var type3e = new QTI.Type().cardinality('multiple').value([1, 2]);
+				var type3f = new QTI.Type().cardinality('multiple').value([2, 1]);
+				var type3g = new QTI.Type().cardinality('multiple').value([1, 2, 3]);
+				ok(type3e.equals(type3f));
+				ok(!type3e.equals(type3g));
+
+				// ordered
+				var type3h = new QTI.Type().cardinality('ordered').value([1, 2, 3]);
+				var type3i = new QTI.Type().cardinality('ordered').value([1, 2, 2, 3]);
+				var type3j = new QTI.Type().cardinality('ordered').value([1, 2, 3]);
+				var type3k = new QTI.Type().cardinality('ordered').value([2, 3, 1]);
+				ok(!type3h.equals(type3i));
+				ok(type3h.equals(type3j));
+				ok(!type3j.equals(type3k));
+			});
+
+	</script>
+
+</head>
+<body>
+	<h1 id="qunit-header">QUnit Test Suite</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+	<div id="qunit-fixture">test markup</div>
+</body>
+</html>
