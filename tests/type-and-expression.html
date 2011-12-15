@@ -58,6 +58,13 @@
 				ok(type3h.equals(type3j));
 				ok(!type3j.equals(type3k));
 			});
+			
+			test("Variables", function(){
+				var var1 = new QTI.Type().baseType('boolean');
+				ok(var1 != null);
+				var var2 = new QTI.Type().baseType('boolean').value(null);
+				ok(var2 != null);
+			});
 
 	</script>
 
