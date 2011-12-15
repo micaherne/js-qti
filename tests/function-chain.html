@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>QUnit Test Suite</title>
+	<link rel="stylesheet" href="qunit/qunit/qunit.css" type="text/css" media="screen">
+	<script type="text/javascript" src="../lib/js/jquery-1.7.1.min.js"></script>
+	<script type="text/javascript" src="../lib/js/jquery-ui-1.8.16/js/jquery-ui-1.8.16.custom.min.js"></script>
+	<script type="text/javascript" src="../lib/js/jquery-qti-widgets.js"></script>
+	<script type="text/javascript" src="qunit/qunit/qunit.js"></script>
+	<script type="text/javascript">
+	
+	var xml = '<responseProcessing xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1"\
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\
+    xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 http://www.imsglobal.org/xsd/imsqti_v2p1.xsd">\
+    <responseCondition>\
+        <responseIf>\
+            <match>\
+                <variable identifier="RESPONSE"/>\
+                <correct identifier="RESPONSE"/>\
+            </match>\
+            <setOutcomeValue identifier="SCORE">\
+                <baseValue baseType="integer">1</baseValue>\
+            </setOutcomeValue>\
+        </responseIf>\
+        <responseElse>\
+            <setOutcomeValue identifier="SCORE">\
+                <baseValue baseType="integer">0</baseValue>\
+            </setOutcomeValue>\
+        </responseElse>\
+    </responseCondition>\
+</responseProcessing>';
+
+var node = $.parseXML(xml).documentElement;
+
+var createProcessFunction = function(node){
+	var childFunctions = [];
+	$(node).children().each(function(i, o) {
+		childFunctions.push(createProcessFunction(o));
+	});
+	
+	switch(node.nodeName) {
+		case 'setOutcomeValue':
+			return function(data) {
+			  data.test = $(node).attr('identifier');
+			  $.each(childFunctions, function(i2, o2) {
+                  o2(data);
+              });
+			}
+		default:
+			 return function(data) {
+		        var nodeName = node.nodeName;
+		        console.log(nodeName + ' not implemented');
+		        $.each(childFunctions, function(i2, o2) {
+		            o2(data);
+		        });
+		    }
+	}
+
+};
+
+var process = createProcessFunction(node);
+
+		
+			test('Basic type', function() {
+				process({ test: 'data'});
+			});
+
+	</script>
+
+</head>
+<body>
+	<h1 id="qunit-header">QUnit Test Suite</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+	<div id="qunit-fixture">test markup</div>
+</body>
+</html>
