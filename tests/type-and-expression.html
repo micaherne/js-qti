@@ -65,6 +65,20 @@
 				var var2 = new QTI.Type().baseType('boolean').value(null);
 				ok(var2 != null);
 			});
+			
+			test("Default value", function(){
+				var v1Xml = '<outcomeDeclaration identifier="CLOSED" cardinality="multiple" baseType="identifier">\
+			        <defaultValue>\
+	            <value>DoorA</value>\
+	            <value>DoorB</value>\
+	            <value>DoorC</value>\
+	        </defaultValue>\
+	    </outcomeDeclaration>';
+				var v1Node = $.parseXML(v1Xml);
+				var v1 = new QTI.Variable(v1Node.documentElement);
+				console.log(v1);
+				ok(v1.cardinality() === 'multiple');
+			});
 
 	</script>
 

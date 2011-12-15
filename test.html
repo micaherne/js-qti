@@ -17,8 +17,9 @@ if(!window.console) console = { log: function(r){} };
 
 $(document).ready(function(){
 	var item1 = $('<div/>').assessmentItem( { 
-		qtiPath: 'http://localhost/js-qti/ref/qtiv2p1pd2/examples/items/extended_text_rubric.xml',
-		//qtiPath: 'http://localhost/js-qti/ref/qtiv2p1pd2/examples/items/choice.xml',
+		qtiPath: 'http://localhost/js-qti/ref/qtiv2p1pd2/examples/items/adaptive.xml',
+        //qtiPath: 'http://localhost/js-qti/ref/qtiv2p1pd2/examples/items/extended_text_rubric.xml',
+        //qtiPath: 'http://localhost/js-qti/ref/qtiv2p1pd2/examples/items/choice.xml',
         //qtiPath: 'http://localhost/js-qti/ref/qtiv2p1pd2/examples/items/hint.xml',
         //qtiPath: 'http://localhost/js-qti/ref/qtiv2p1pd2/examples/items/feedback.xml',
         responseProcessing: new QTI.ClientResponseProcessing()} );
