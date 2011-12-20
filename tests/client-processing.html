@@ -7,7 +7,8 @@
 	<script type="text/javascript" src="../lib/js/jquery-1.7.1.min.js"></script>
 	<script type="text/javascript" src="../lib/js/jquery-ui-1.8.16/js/jquery-ui-1.8.16.custom.min.js"></script>
 	<script type="text/javascript" src="../lib/js/jquery-qti-widgets.js"></script>
-	<script type="text/javascript" src="qunit/qunit/qunit.js"></script>
+    <script type="text/javascript" src="../lib/js/jquery-qti-clientprocessing.js"></script>
+    <script type="text/javascript" src="qunit/qunit/qunit.js"></script>
 	<script type="text/javascript">
 		
 			test('Variable declarations', function() {
@@ -20,15 +21,45 @@
 				equals('STORY', $(var1Xml.documentElement).attr('identifier'));
 
 				var var1 = new QTI.Variable(var1Xml.documentElement);
-				equals('identifier', var1.baseType);
+				equals('identifier', var1.baseType());
 				equals('openingGambit', var1.getDefaultValue());
 
 				var var1Instance = var1.newInstance();
 				equals('openingGambit', var1Instance.getValue());
 
-				var1Instance.cardinality = 'multiple';
-				var1Instance.setValue([2, 3, 5, 7]);
-				equals(5, var1Instance.getValue()[2]);
+				var1Instance.cardinality('multiple');
+				var1Instance.value([2, 3, 5, 7]);
+				equals(5, var1Instance.value()[2]);
+			});
+			
+			module('Expressions');
+			
+			var proc = new QTI.ClientResponseProcessing();
+			
+			test('baseValue', function() {
+			    var xml1 = $.parseXML('<baseValue baseType="identifier">incomplete</baseValue>');
+			    var fn1 = proc.createProcessFunction(xml1.documentElement);
+			    var result1 = fn1({});
+			    equals(result1.baseType(), 'identifier');
+			    equals(result1.cardinality(), 'single');
+			    equals(result1.value(), 'incomplete');
+			});
+			
+			test('variable', function() {
+				var item1 = new $.qti.assessmentItem();
+				item1.startSession();
+				item1.addVariable(new QTI.Variable({identifier:'STORY'}).value('Test result 1'));
+                equals(item1.getVariable('STORY').identifier, 'STORY');
+                equals(item1.getVariable('STORY').value(), 'Test result 1');
+                equals(item1.getVariable('STORY').cardinality(), 'single');
+                
+                var xml2 = $.parseXML('<variable identifier="STORY"/>');
+                var fn2 = proc.createProcessFunction(xml2.documentElement);
+                var result2 = fn2(item1);
+                
+                equals(result2.baseType(), 'identifier');
+                equals(result2.cardinality(), 'single');
+                equals(result2.value(), 'Test result 1');
 			});
 
 	</script>
