@@ -1,68 +1,140 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8" />
-	<title>QUnit Test Suite</title>
-	<link rel="stylesheet" href="qunit/qunit/qunit.css" type="text/css" media="screen">
-	<script type="text/javascript" src="../lib/js/jquery-1.7.1.min.js"></script>
-	<script type="text/javascript" src="../lib/js/jquery-ui-1.8.16/js/jquery-ui-1.8.16.custom.min.js"></script>
-	<script type="text/javascript" src="../lib/js/jquery-qti-widgets.js"></script>
-    <script type="text/javascript" src="../lib/js/jquery-qti-clientprocessing.js"></script>
-    <script type="text/javascript" src="qunit/qunit/qunit.js"></script>
-	<script type="text/javascript">
+<meta charset="UTF-8" />
+<title>QUnit Test Suite</title>
+<link rel="stylesheet" href="qunit/qunit/qunit.css" type="text/css"
+	media="screen">
+<script type="text/javascript" src="../lib/js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript"
+	src="../lib/js/jquery-ui-1.8.16/js/jquery-ui-1.8.16.custom.min.js"></script>
+<script type="text/javascript" src="../lib/js/jquery-qti-widgets.js"></script>
+<script type="text/javascript"
+	src="../lib/js/jquery-qti-clientprocessing.js"></script>
+<script type="text/javascript" src="qunit/qunit/qunit.js"></script>
+<script type="text/javascript">
+	var var1Xml = $
+			.parseXML('<outcomeDeclaration identifier="STORY" cardinality="single" baseType="identifier">\
+            <defaultValue>\
+            <value>openingGambit</value>\
+        </defaultValue>\
+    </outcomeDeclaration>');
+	
+	var var2Xml = $
+	    .parseXML('<responseDeclaration identifier="WITH_CORRECT" cardinality="single" baseType="identifier">\
+			    <correctResponse>\
+			    <value>This is the correct value!</value>\
+			</correctResponse>\
+			</responseDeclaration>');
+
+	test('Variable declarations', function() {
+
+		// Created from XML
+		equals('STORY', $(var1Xml.documentElement).attr('identifier'));
+
+		var var1 = new QTI.Variable(var1Xml.documentElement);
+		equals('identifier', var1.baseType());
+		equals('openingGambit', var1.getDefaultValue().value());
+
+		var var1Instance = var1.newInstance();
+		equals('openingGambit', var1Instance.value());
+
+		var1Instance.cardinality('multiple');
+		var1Instance.value([ 2, 3, 5, 7 ]);
+		equals(5, var1Instance.value()[2]);
 		
-			test('Variable declarations', function() {
-				var var1Xml = $.parseXML('<outcomeDeclaration identifier="STORY" cardinality="single" baseType="identifier">\
-						<defaultValue>\
-						<value>openingGambit</value>\
-					</defaultValue>\
-				</outcomeDeclaration>');
+		var var2 = new QTI.Variable(var2Xml.documentElement);
+		equals('identifier', var2.baseType());
+		equals('WITH_CORRECT', var2.identifier);
+		equals('This is the correct value!', var2.getCorrectResponse().value());
 
-				equals('STORY', $(var1Xml.documentElement).attr('identifier'));
+		// Created from code
+		var var2 = new QTI.Variable({}).value('test');
+		equals(var2.value(), 'test');
+	});
 
-				var var1 = new QTI.Variable(var1Xml.documentElement);
-				equals('identifier', var1.baseType());
-				equals('openingGambit', var1.getDefaultValue());
+	module('Expressions');
 
-				var var1Instance = var1.newInstance();
-				equals('openingGambit', var1Instance.getValue());
+	var proc = new QTI.ClientResponseProcessing();
 
-				var1Instance.cardinality('multiple');
-				var1Instance.value([2, 3, 5, 7]);
-				equals(5, var1Instance.value()[2]);
-			});
-			
-			module('Expressions');
-			
-			var proc = new QTI.ClientResponseProcessing();
-			
-			test('baseValue', function() {
-			    var xml1 = $.parseXML('<baseValue baseType="identifier">incomplete</baseValue>');
-			    var fn1 = proc.createProcessFunction(xml1.documentElement);
-			    var result1 = fn1({});
-			    equals(result1.baseType(), 'identifier');
-			    equals(result1.cardinality(), 'single');
-			    equals(result1.value(), 'incomplete');
-			});
-			
-			test('variable', function() {
-				var item1 = new $.qti.assessmentItem();
-				item1.startSession();
-				item1.addVariable(new QTI.Variable({identifier:'STORY'}).value('Test result 1'));
-                equals(item1.getVariable('STORY').identifier, 'STORY');
-                equals(item1.getVariable('STORY').value(), 'Test result 1');
-                equals(item1.getVariable('STORY').cardinality(), 'single');
-                
-                var xml2 = $.parseXML('<variable identifier="STORY"/>');
-                var fn2 = proc.createProcessFunction(xml2.documentElement);
-                var result2 = fn2(item1);
-                
-                equals(result2.baseType(), 'identifier');
-                equals(result2.cardinality(), 'single');
-                equals(result2.value(), 'Test result 1');
+	test(
+			'baseValue',
+			function() {
+				var xml1 = $
+						.parseXML('<baseValue baseType="identifier">incomplete</baseValue>');
+				var fn1 = proc.createProcessFunction(xml1.documentElement);
+				var result1 = fn1({});
+				equals(result1.baseType(), 'identifier');
+				equals(result1.cardinality(), 'single');
+				equals(result1.value(), 'incomplete');
 			});
 
-	</script>
+	var item1 = new $.qti.assessmentItem();
+	item1.startSession();
+
+	test('variable', function() {
+		// This shouldn't work as addVariable is looking for a declaration - any value is overwritten
+		item1.addVariable(new QTI.Variable({
+			identifier : 'var1'
+		}).value('Test result 1'));
+		equals(item1.getVariable('var1').identifier, 'var1');
+		equals(item1.getVariable('var1').value(), 'Test result 1');
+		equals(item1.getVariable('var1').cardinality(), 'single');
+
+		var xml2 = $.parseXML('<variable identifier="var1"/>');
+		var fn2 = proc.createProcessFunction(xml2.documentElement);
+		var result2 = fn2(item1);
+
+		equals(result2.baseType(), 'identifier');
+		equals(result2.cardinality(), 'single');
+		equals(result2.value(), 'Test result 1');
+	});
+
+	test('default', function() {
+		item1.addVariable(new QTI.Variable(var1Xml.documentElement));
+		var xml3 = $.parseXML('<default identifier="STORY"/>');
+		var fn3 = proc.createProcessFunction(xml3.documentElement);
+		var result3 = fn3(item1);
+
+		equals(result3.baseType(), 'identifier');
+		equals(result3.cardinality(), 'single');
+		equals(result3.value(), 'openingGambit');
+	});
+
+	test('correct', function() {
+		item1.addVariable(new QTI.Variable(var2Xml.documentElement));
+		var xml4 = $.parseXML('<correct identifier="WITH_CORRECT"/>');
+		var fn4 = proc.createProcessFunction(xml4.documentElement);
+		var result4 = fn4(item1);
+
+		equals(result4.baseType(), 'identifier');
+		equals(result4.cardinality(), 'single');
+		equals(result4.value(), 'This is the correct value!');
+	});
+	
+   test('null', function() {
+        var xml = $.parseXML('<null />');
+        var fn = proc.createProcessFunction(xml.documentElement);
+        var result = fn(item1);
+
+        equals(result.baseType(), 'identifier');
+        equals(result.cardinality(), 'single');
+        equals(result.value(), null);
+    });
+   
+   test('randomInteger', function() {
+       var xml = $.parseXML('<randomInteger min="342" max="872" step="10" />');
+       var fn = proc.createProcessFunction(xml.documentElement);
+       var result = fn(item1);
+
+       equals(result.baseType(), 'integer');
+       equals(result.cardinality(), 'single');
+       var val = result.value();
+       ok(val >= 342, 'val = ' + val);
+       ok(val <= 872);
+       ok(val % 10 == 2);
+   });
+</script>
 
 </head>
 <body>
